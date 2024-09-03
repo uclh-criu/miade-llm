@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "relation-extractor"
+version = "0.1.0"
+description = "Extracts relations between clinical entities in a JSON-format"
+authors = ["jennifer Jiang-Kells <jenniferjiangkells@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "0.1"
+replicate = ">=0.15.4"
+medcat = "<2.0"
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.21"
+
+[tool.langserve]
+export_module = "relation_extractor"
+export_attr = "chain"
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"

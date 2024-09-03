@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "miade-llm"
+version = "0.1.0"
+description = "A collection of chains for the detailed extraction of diagnosis in medical ntoes"
+authors = ["Jennifer Jiang-Kells <jenniferjiangkells@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9, <3.12"
+uvicorn = "^0.23.2"
+langserve = {extras = ["server"], version = ">=0.0.30"}
+pydantic = "<2"
+langchainhub = "^0.1.14"
+relation-extractor = {path = "packages/relation-extractor", develop = true}
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
