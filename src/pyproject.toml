@@ -18,6 +18,8 @@ relation-extractor = {path = "packages/relation-extractor", develop = true}
 
 [tool.poetry.group.dev.dependencies]
 langchain-cli = ">=0.0.15"
+jupyterlab = "^4.2.5"
+python-dotenv = "^1.0.1"
 
 [build-system]
 requires = ["poetry-core"]
