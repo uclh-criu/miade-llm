@@ -39,4 +39,6 @@ __pycache__/
 
 # Ignore notebook and data folder
 notebooks/
-data/
+data/*
+!data/models
+data/models/*

@@ -10,6 +10,8 @@ Currently using [Mixtral-8x7B-instruct-v0.1 hosted by Replicate](https://replica
 
 Prompts are currently pulled from [LangChain Hub](https://smith.langchain.com/hub) so you also need to set `LANGCHAIN_API_KEY`.
 
+The model id, prompt, and extra model paths can be configured in `config/config.yaml`
+
 (Optional) If you also want to configure [LangSmith](https://smith.langchain.com/) to trace and monitor chains, set these environment variables:
 
 ```shell
@@ -55,6 +57,13 @@ runnable = RemoteRunnable("http://localhost:8000/name-of-package")
 ## Chains
 ### relation-extractor
 Extracts relations between concepts found in note and outputs in a JSON-format. Uses MedCAT for NER (requires model).
+
+MedCAT model is required to run this chain. To download an example model trained on MIMIC:
+
+```bash
+pip install gdown
+gdown 'https://drive.google.com/uc?export=download&id=17s999FIotRenltR6gr_f8ZjdaXc-u1Gx', -O ./data/models/miade_problems_model_f25ec9423958e8d6.zip
+```
 
 ### RAG chain
 placeholder description.
