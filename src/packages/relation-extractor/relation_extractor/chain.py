@@ -1,3 +1,4 @@
+import yaml
 from operator import itemgetter
 from pydantic import BaseModel
 
@@ -34,18 +35,24 @@ def extract_entities(_dict):
     cat = _dict['model'].model
     results = cat.get_entities(_dict['text'])
     return [item['source_value'] for item in results['entities'].values()]
-    
+
+
+# Load configuration from YAML file
+with open("../config/config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+
+
 # LLM
-replicate_id = "mistralai/mixtral-8x7b-instruct-v0.1:5d78bcd7a992c4b793465bcdcf551dc2ab9668d12bb7aa714557a21c1e77041c"  # noqa: E501
+replicate_id = config.get("replicate_id", "mistralai/mixtral-8x7b-instruct-v0.1:5d78bcd7a992c4b793465bcdcf551dc2ab9668d12bb7aa714557a21c1e77041c") # noqa: E501
 model = Replicate(
     model=replicate_id,
     model_kwargs={"temperature": 0},
 )
 
-medcat_path = "../data/models/miade_mimic_problems_unsupervised_trained_modelpack_w_meta_jun_2023_f25ec9423958e8d6.zip"
+medcat_path = config.get("medcat_model_path", "../data/models/miade_mimic_problems_unsupervised_trained_modelpack_w_meta_jun_2023_f25ec9423958e8d6.zip")
 cat = CAT.load_model_pack(medcat_path)
 
-prompt = hub.pull("jenniferjiang/extract-medical-entity-relations-base")
+prompt = hub.pull(config.get("prompt_id", "jenniferjiang/extract-medical-entity-relations-base"))
 
 json_schema = """{
     "$schema": "http://json-schema.org/draft-07/schema#",

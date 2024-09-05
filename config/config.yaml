@@ -1,0 +1,3 @@
+replicate_model_id: "mistralai/mixtral-8x7b-instruct-v0.1:5d78bcd7a992c4b793465bcdcf551dc2ab9668d12bb7aa714557a21c1e77041c"
+langsmith_prompt_id: "jenniferjiang/extract-medical-entity-relations-base"
+medcat_model_path: "../data/models/miade_mimic_problems_unsupervised_trained_modelpack_w_meta_jun_2023_f25ec9423958e8d6.zip"
