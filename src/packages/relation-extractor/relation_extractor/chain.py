@@ -31,10 +31,25 @@ class ExtractorModel(BaseModel):
         return base_dict
 
 
-def extract_entities(_dict):
+def extract_entities(_dict, context):
     cat = _dict['model'].model
     results = cat.get_entities(_dict['text'])
+    context['extracted_entities'] = {item['source_value']: item['cui'] for item in results['entities'].values()}
     return [item['source_value'] for item in results['entities'].values()]
+
+
+def update_with_cuis(llm_output, context):
+    concept_dict = context['extracted_entities']
+    for item in llm_output['values']:
+        node_1_id = concept_dict.get(item['node_1'])
+        node_2_id = concept_dict.get(item['node_2'])
+        if node_1_id:
+            item['node_1'] = item['node_1'] + " | " + node_1_id
+        if node_2_id:
+            item['node_2'] = item['node_2'] + " | " + node_2_id
+    llm_output['context'] = context
+
+    return llm_output
 
 
 # Load configuration from YAML file
@@ -76,14 +91,21 @@ json_schema = """{
     "required": ["values"]
 }
 """
+
+# Context dictionary to store memory
+context = {
+    "memory": {}
+}
+
 # Chain
 chain = (
     {
         "note": RunnablePassthrough(),
         "output_schema": lambda x: json_schema,
-        "concepts": {"text": itemgetter("note"), "model": lambda x: ExtractorModel(model=cat)} | RunnableLambda(extract_entities)
+        "concepts": {"text": itemgetter("note"), "model": lambda x: ExtractorModel(model=cat)} | RunnableLambda(lambda x: extract_entities(x, context))
     } 
     | prompt 
     | model
     | JsonOutputParser()
+    | RunnableLambda(lambda x: update_with_cuis(x, context))
 )
