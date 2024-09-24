@@ -892,7 +892,6 @@ develop = true
 [package.dependencies]
 langchain = "0.2"
 relation-extractor = {path = "../relation-extractor", develop = true}
-replicate = ">=0.15.4"
 
 [package.source]
 type = "directory"
@@ -3867,6 +3866,7 @@ develop = true
 [package.dependencies]
 langchain = ">=0.2,<0.3"
 langchain-community = ">=0.2,<0.3"
+langchainhub = "^0.1.14"
 medcat = "<2.0"
 replicate = ">=0.15.4"
 
@@ -5769,4 +5769,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9, <3.12"
-content-hash = "f442611c507fdba291457c8589c6a0f2e09352e9840dea85753445a9d2353d10"
+content-hash = "367dd4ed6db6741b6fe39e84948b6ce20d854d470a39ed96f4337b968413076a"

@@ -8,7 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.9"
 langchain = "0.2"
-replicate = ">=0.15.4"
 relation-extractor = {path = "../relation-extractor", develop = true}
 
 [tool.poetry.group.dev.dependencies]

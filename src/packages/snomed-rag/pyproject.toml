@@ -1,23 +1,20 @@
 [tool.poetry]
-name = "relation-extractor"
+name = "snomed-rag"
 version = "0.1.0"
-description = "Extracts relations between clinical entities in a JSON-format"
-authors = ["jennifer Jiang-Kells <jenniferjiangkells@gmail.com>"]
+description = ""
+authors = ["jenniferjiangkells <jenniferjiangkells@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
 langchain = ">=0.2,<0.3"
 langchain-community = ">=0.2,<0.3"
-langchainhub = "^0.1.14"
-replicate = ">=0.15.4"
-medcat = "<2.0"
 
 [tool.poetry.group.dev.dependencies]
 langchain-cli = ">=0.0.22"
 
 [tool.langserve]
-export_module = "relation_extractor"
+export_module = "snomed_rag"
 export_attr = "chain"
 
 [build-system]
