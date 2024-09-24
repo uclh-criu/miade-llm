@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "detailed-diagnoses-extractor"
+version = "0.1.0"
+description = ""
+authors = ["jenniferjiangkells <jenniferjiangkells@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "0.2"
+replicate = ">=0.15.4"
+relation-extractor = {path = "../relation-extractor", develop = true}
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.22"
+
+[tool.langserve]
+export_module = "detailed_diagnoses_extractor"
+export_attr = "chain"
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"
