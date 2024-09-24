@@ -43,3 +43,5 @@ data/*
 data/models/*
 models/
 */models/
+.ipynb_checkpoints/
+.cursorignore
