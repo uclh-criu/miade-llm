@@ -11,15 +11,15 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.9, <3.12"
 uvicorn = "^0.23.2"
-langserve = {extras = ["server"], version = ">=0.0.30"}
-pydantic = "<2"
-langchainhub = "^0.1.14"
+langserve = {extras = ["server"], version = ">=0.2,<0.3"}
 relation-extractor = {path = "packages/relation-extractor", develop = true}
+detailed-diagnoses-extractor = {path = "packages/detailed-diagnoses-extractor", develop = true}
 
 [tool.poetry.group.dev.dependencies]
-langchain-cli = ">=0.0.15"
+langchain-cli = ">=0.0.22"
 jupyterlab = "^4.2.5"
 python-dotenv = "^1.0.1"
+ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]
