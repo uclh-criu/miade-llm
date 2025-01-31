@@ -1,7 +1,6 @@
 # Ignore build output
 build/
 dist/
-app/
 
 # Ignore dependencies
 node_modules/
@@ -42,3 +41,7 @@ notebooks/
 data/*
 !data/models
 data/models/*
+models/
+*/models/
+.ipynb_checkpoints/
+.cursorignore
