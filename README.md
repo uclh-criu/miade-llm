@@ -6,11 +6,11 @@ This project uses LangServe to deploy langchain chains as REST API endpoints.
 
 ## Environment Setup
 
-Currently using [Mixtral-8x7B-instruct-v0.1 hosted by Replicate](https://replicate.com/mistralai/mixtral-8x7b-instruct-v0.1/versions) so you need to make sure that `REPLICATE_API_TOKEN` is set in your environment.
+This project uses the [Replicate](https://replicate.com/) API to run models. You will need to set the `REPLICATE_API_TOKEN` environment variable (you usually get some free credits when you sign up). If you would like to use a different service or use self-hosted models, you would need to update the `relation_extractor` chain.
 
-NOTE: The Mixtral model is no longer available on Replicate, you will need to use a different instruction model available on Replicate (or use a different service if you want!)The current default model is [`microsoft/phi-3-mini-128k-instruct`](https://replicate.com/microsoft/phi-3-mini-128k-instruct).
+**Update**: The previous tested version of the `relation_extractor` chain used [Mixtral-8x7B-instruct-v0.1](https://replicate.com/mistralai/mixtral-8x7b-instruct-v0.1/versions), but this model is no longer available on Replicate. The current default model is [`microsoft/phi-3-mini-128k-instruct`](https://replicate.com/microsoft/phi-3-mini-128k-instruct).
 
-Prompts are currently pulled from [LangChain Hub](https://smith.langchain.com/hub) so you also need to set `LANGCHAIN_API_KEY`. You can view the prompt [here](https://smith.langchain.com/hub/jenniferjiang/extract-medical-entity-relations-base).
+Prompts are currently pulled from [LangChain Hub](https://smith.langchain.com/hub) so you also need to set `LANGCHAIN_API_KEY`. You can view the full prompt [here](https://smith.langchain.com/hub/jenniferjiang/extract-medical-entity-relations-base).
 
 The model id, prompt, and extra model paths can be configured in `config/config.yaml`
 
@@ -69,7 +69,7 @@ gdown 'https://drive.google.com/uc?export=download&id=17s999FIotRenltR6gr_f8Zjda
 
 ## Experimental
 ### SNOMED RAG Agent
-An experimental agent that maps clinical concepts to SNOMED CT codes using LangGraph. The agent:
+An experimental agent that maps clinical concepts to SNOMED CT codes using [LangGraph](https://langchain-ai.github.io/langgraph/). The agent:
 
 1. Takes a clinical relation triplet (e.g., "fracture of left femur") as input
 2. Generates appropriate SNOMED CT search terms
@@ -77,24 +77,23 @@ An experimental agent that maps clinical concepts to SNOMED CT codes using LangG
 4. Predicts and evaluates morphology and finding site attributes
 5. Scores candidate terms to find the best SNOMED CT concept match
 
-Example usage can be found in `notebooks/snomed_agent.ipynb`. Requires access to a SNOMED CT terminology server.
+Example usage can be found in `notebooks/snomed_agent.ipynb`. Requires access to a SNOMED CT terminology server. Currently uses the [Snowstorm SNOMED CT server](https://snowstorm.ihtsdotools.org/snowstorm/snomed-ct/swagger-ui/index.html#/).
 
-NOTE: This agent is experimental and may not work as expected.
-
-
-**Input Processing:**
+#### Graph Components
+##### Nodes
+1. **Search**
 - Takes a relation triplet (e.g., `{"node_1": "fracture", "node_2": "left femur", "edge": "of"}`)
 - The `search` node uses GPT-4 to generate appropriate search variations (e.g., "left femur fracture", "fracture of left femur").
 - These terms are used to query the SNOMED CT terminology server
 
-**Attribute Prediction:**
+2. **Planner**
 - The `planner` node analyzes the primary search term
 - Predicts two key SNOMED attributes:
   - Morphology (form/structure of abnormality)
   - Finding Site (anatomical location)
 - These predictions help evaluate candidate matches
 
-**Evaluation Process:**
+3. **Evaluator**
 - The `evaluator` node:
   1. Retrieves full concept details for each candidate
   2. Compares predicted attributes with actual SNOMED relationships
@@ -103,32 +102,18 @@ NOTE: This agent is experimental and may not work as expected.
 - Candidates scoring ≥4 are added to a shortlist
 - A perfect match (score=5) is selected as the final candidate
 
-**Refinement:**
+4. **Refiner**
 - If no suitable candidate is found, the `refine` node can modify search terms
 - Process continues until either:
   1. A perfect match is found
   2. Maximum revisions are reached
 
-**Usage Considerations:**
-- Requires access to a SNOMED CT terminology server
-- Performance depends on server response times
-- Quality of matches relies on the underlying LLM's medical knowledge
-- Best suited for clinical terms with clear morphology and finding sites
-
-#### Graph Components
-
-**Nodes:**
-1. `search` - Generates search terms and queries SNOMED CT server
-2. `planner` - Predicts morphology and finding site attributes
-3. `evaluator` - Evaluates candidate terms against predicted attributes
-4. `refine` - (Optional) Refines search if no suitable candidate is found
-
-**Prompts:**
+##### Prompts
 1. `QUERY_PROMPT` - Generates 1-3 search terms from relation triplet
 2. `ATTRIBUTE_PROMPT` - Predicts morphology and finding site for a term
 3. `EVALUATION_PROMPT` - Scores candidates on 1-5 scale based on attribute matches
 
-**State Schema:**
+##### State Schema
 
 ```python
 class AgentState(BaseModel):
@@ -150,3 +135,9 @@ class ScoreCard(BaseModel):
     score: int  # 1-5 rating
     reasoning: str  # Explanation of score
 ```
+
+##### Usage Considerations
+- Requires access to a SNOMED CT terminology server
+- Performance depends on server response times
+- Quality of matches relies on the underlying LLM's medical knowledge
+- Best suited for clinical terms with clear morphology and finding sites
