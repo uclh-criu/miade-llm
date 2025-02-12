@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from relation_extractor import chain as relation_extrator_chain
 from coder import chains as coder_chains
+from coder import models
 
 from langserve import add_routes
 
@@ -14,6 +15,18 @@ app = FastAPI()
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
+@app.get("/models")
+async def model_list():
+    return {
+        "model_endpoints": [
+            {
+                "name": f"{provider}: {name}",
+                "endpoint":f"{provider}-{name}/invoke"
+            }
+
+            for name, provider in models
+        ]
+    }
 
 class Input(BaseModel):
     note: str
