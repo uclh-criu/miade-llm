@@ -7,7 +7,11 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 
 
-models = [("gpt-4o-2024-08-06", "openai"), ("claude-3-5-sonnet-20241022", "anthropic")]
+models = [
+    ("gpt-4o-2024-08-06", "openai"),
+    ("claude-3-5-sonnet-20241022", "anthropic"),
+    ("mistral-large-latest", "mistralai"),
+]
 
 
 class Concept(BaseModel):
