@@ -1,5 +1,5 @@
 import os
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class RelationExtractorConfig(BaseSettings):
     model_name: str = "gpt-3.5-turbo"

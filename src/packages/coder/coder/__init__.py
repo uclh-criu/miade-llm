@@ -1,3 +1,3 @@
-from coder.chain import chain
+from coder.chain import chains
 
-__all__ = ["chain"]
+__all__ = ["chains"]

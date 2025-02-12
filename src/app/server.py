@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from relation_extractor import chain as relation_extrator_chain
-from coder import chain as coder_chain
+from coder import chains as coder_chains
 
 from langserve import add_routes
 
@@ -25,10 +25,11 @@ add_routes(
     relation_extrator_chain.with_types(input_type=Input),
     path="/relation_extractor_chain",
 )
-add_routes(
-    app,
-    coder_chain.with_types(input_type=Input),
-    path="/coder_chain",
+for name, chain in coder_chains:
+    add_routes(
+        app,
+        chain.with_types(input_type=Input),
+        path=f"/{name}",
 )
 
 if __name__ == "__main__":
