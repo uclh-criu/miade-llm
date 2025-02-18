@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 from langchain.chat_models import init_chat_model
@@ -34,12 +34,6 @@ raw_prompt = ChatPromptTemplate.from_messages(
         {"role": "user", "content": "{note}"},
     ]
 )
-
-model = init_chat_model(
-    "gpt-4o-2024-08-06", model_provider="openai"
-).with_structured_output(ConceptList)
-
-chain = {"note": RunnablePassthrough()} | raw_prompt | model
 
 chains = [
     (
