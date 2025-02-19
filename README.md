@@ -23,26 +23,25 @@ export LANGCHAIN_PROJECT=<your-project>  # if not specified, defaults to "defaul
 
 ## Usage
 
-To install dependencies make sure you have `poetry` installed:
+To install dependencies make sure you have [uv](https://github.com/astral-sh/uv) installed.
 
+On macOS and Linux
 ```shell
-pip install poetry
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Then install the project dependencies with poetry:
-
+On Windows:
 ```shell
-cd src
-poetry install
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 To spin up a LangServer instance run (make sure you are in the `src` directory):
 
 ```shell
-poetry run langchain serve
+source .env && uv run langchain serve
 ```
 
-This will start the FastAPI app with a server is running locally at 
+This will start the FastAPI app with a server is running locally at
 [http://localhost:8000](http://localhost:8000)
 
 We can see all endpoints at [http://localhost:8000/docs](http://localhost:8000/docs).
