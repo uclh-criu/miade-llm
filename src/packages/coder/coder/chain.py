@@ -15,16 +15,17 @@ models = [
 
 
 class Condition(BaseModel):
-    code: str
-    severity: str
-    bodySite: str
-    clinicalStatus: str
-    onset: str
-    abatement: str
-    stage: str
-    evidence: str
-    manifestation: str
-    note: str
+    name: str
+    severity: Optional[str]
+    bodySite: Optional[str]
+    clinicalStatus: Optional[str]
+    onset: Optional[str]
+    abatement: Optional[str]
+    stage: Optional[str]
+    evidence: Optional[str]
+    manifestation: Optional[str]
+    cause: Optional[str]
+    note: Optional[str]
 
 class ConditionList(BaseModel):
     problems: List[Condition]
@@ -36,6 +37,8 @@ raw_prompt = ChatPromptTemplate.from_messages(
             "role": "system",
             "content": """
             You are an expert at interpreting clinical notes and extracting information in structured formats conforming to FHIR resources. You will be given unstructured text from a medical note and should extract information about patient conditions in order to create a problem list, according to the following guidance from the FHIR documentation:
+
+            You only include details mentioned in the note, you do not hallucinate, you do not make any inferences.
 
             The 'condition' resource is used to record detailed information about a condition, problem, diagnosis, or other event, situation, issue, or clinical concept that has risen to a level of concern. The condition could be a point in time diagnosis in context of an encounter, it could be an item on the practitioner’s Problem List, or it could be a concern that doesn’t exist on the practitioner’s Problem List. Oftentimes, a condition is about a clinician's assessment and assertion of a particular aspect of a patient's state of health. It can be used to record information about a disease/illness identified from application of clinical reasoning over the pathologic and pathophysiologic findings (diagnosis), or identification of health issues/situations that a practitioner considers harmful, potentially harmful and may be investigated and managed (problem), or other health issue/situation that may require ongoing monitoring and/or management (health issue/concern).
 
@@ -57,7 +60,7 @@ raw_prompt = ChatPromptTemplate.from_messages(
             - Patient has had coronary bypass graft
 
             As per the FHIR condition resource, each condition should be structured in the following way. Include SNOMED CT term descriptions if possible but not SNOMED CT concept IDs. If there is no relevant information for a field, leave it blank.
-            - code: Identification of the condition, problem or diagnosis (mandatory)
+            - name: Identification of the condition, problem or diagnosis (mandatory)
             - severity: Subjective severity of condition
             - bodySite: Anatomical location, if relevant
             - clinicalStatus: active | recurrence | relapse | inactive | remission | resolved | unknown
