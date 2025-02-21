@@ -1,0 +1,9 @@
+[project]
+name = "coder"
+version = "0.1.0"
+description = "Automatic clinical coding"
+dependencies = []
+
+[tool.langserver]
+export_module = "coder"
+export_attr = "chain"
